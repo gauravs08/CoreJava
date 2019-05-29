@@ -1,4 +1,4 @@
-package com.Threads.RunnableThread;
+package com.SingletonExample;
 
  public class RunnableThread implements Runnable {
 
@@ -16,7 +16,10 @@ package com.Threads.RunnableThread;
 	public void run() {
 		//Display info about this particular thread
 		System.out.println(Thread.currentThread());
-
+		//SingletonExample instance = new SingletonExample(); this is invalid
+		SingletonExample instance = SingletonExample.getInstance();
+		System.out.println(instance);
+		System.out.println(instance.i);
 	}
 
 }

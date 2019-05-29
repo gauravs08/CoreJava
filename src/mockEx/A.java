@@ -61,6 +61,9 @@ class TestAssert {
 			System.out.println(rx);
 		}
 		t.f(5);
+		double d = 15.12345;
+		System.out.println(Math.round(d));
+		
 		
 		
 	}

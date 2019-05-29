@@ -1,8 +1,7 @@
 package com.SingletonExample;
 
-import java.lang.reflect.Constructor;
 
-public class SingletonExample {
+public class SingletonExample{
 	//Note: Singleton Instance is declared as volatile variable to ensure * every thread see updated value for _instance.
 	
 	//volatile keyword in Java guarantees that value of the volatile variable will always be read from main memory and not from Thread's local cache.
@@ -15,12 +14,10 @@ public class SingletonExample {
 	 * that instance has been created until it comes out of the Singleton block, 
 	 * so if Thread A is creating Singleton instance and just after creation lost the CPU,
 	 *  all other thread will not be able to see value of _instance as not null and they will believe its still null.
-
 	 * */
 	
-	
 	private static volatile SingletonExample _instance = null;
-
+	volatile static int i;
 	private SingletonExample() {
 	}
 
@@ -30,7 +27,9 @@ public class SingletonExample {
 			synchronized (SingletonExample.class) {
 				//double checked locking - because second check of Singleton instance with lock
 				if (_instance == null) {
+					System.out.println("Creating new Instance now.");
 					_instance = new SingletonExample();
+					i+=20;
 				}
 			}
 		}
@@ -39,10 +38,26 @@ public class SingletonExample {
 
 	public static void main(String[] args) {
 
+		System.out.println(i);
 		SingletonExample SingObj = new SingletonExample();
-		System.out.println(SingObj.getInstance());
+		SingletonExample SingObj1 = new SingletonExample();
+		SingletonExample SingObj2 = new SingletonExample();
 		
-
+		System.out.println(SingObj.getInstance());
+		System.out.println(SingObj1.getInstance());
+		System.out.println(SingObj2.getInstance());
+		
+		Thread thread1 = new Thread(new RunnableThread(), "thread1");
+		Thread thread2 = new Thread(new RunnableThread(), "thread2");
+		
+		RunnableThread thread3 = new RunnableThread("thread3");
+		
+		RunnableThread thread4 = new RunnableThread();
+		//Start the threads
+		thread1.start();
+		thread2.start();
+		thread3.run();
+		thread4.run();
 	}
 
 	

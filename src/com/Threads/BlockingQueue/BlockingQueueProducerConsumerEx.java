@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 	     //Creating shared object
 	     ArrayBlockingQueue arrayBQ = new ArrayBlockingQueue<Integer>(10);
 	     BlockingQueue sharedQueue = new LinkedBlockingQueue();
-	 
+	  System.out.println("Total Capacity of sharedQ ="+sharedQueue.remainingCapacity());
 	     //Creating Producer and Consumer Thread
 	     Thread prodThread = new Thread(new Producer(sharedQueue));
 	     Thread consThread = new Thread(new Consumer(sharedQueue));
@@ -44,7 +44,8 @@ import java.util.logging.Logger;
 	            try {
 	                System.out.println("Produced: " + i);
 	                bol =  sharedQueue.offer(i);
-	                System.out.println("while producing " + bol);
+	                notifyAll();
+	                System.out.println("while producing " + bol + "Remaining capacity ="+ sharedQueue.remainingCapacity());
 	            } catch(IllegalStateException e) {
 	            	 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, e);
 	        }
@@ -66,7 +67,12 @@ import java.util.logging.Logger;
 	    public void run() {
 	        while(true){
 	            try {
-	                System.out.println("Consumed: "+ sharedQueue.take());
+	            	if(sharedQueue.isEmpty()) {
+	            		this.wait();
+	            		System.out.println("Consumer Waiting......");
+	            	}else {
+	            		System.out.println("Consumed: "+ sharedQueue.take());
+	            	}
 	            } catch (InterruptedException ex) {
 	                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
 	            }
